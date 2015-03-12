@@ -1,0 +1,18 @@
+{
+  "name": "ell-iCloudService",
+  "version": "1.0.0",
+  "description": "Express cloud service",
+  "main": "api.js",
+  "dependencies": {
+    "express": "^4.12.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "main"
+  },
+  "keywords": [
+    "Express"
+  ],
+  "author": "Jori Winderickx",
+  "license": ""
+}
