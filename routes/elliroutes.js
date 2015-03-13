@@ -5,8 +5,14 @@ var router = express.Router();
 
 var dbHandler = new databaseHandler();
 
-router.route('/getnodes').get(function(req, res) {
+router.route('/nodes').get(function(req, res) {
    dbHandler.getNodes(function(obj){
+      res.send(JSON.stringify(obj));
+   });
+});
+
+router.route('/nodes/:id').get(function(req, res) {
+   dbHandler.getNode(req.params.id, function(obj){
       res.send(JSON.stringify(obj));
    });
 });
