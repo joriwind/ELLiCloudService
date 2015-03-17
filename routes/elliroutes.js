@@ -1,6 +1,7 @@
-var Object1 = require('../objects/Node');
+var Node = require('../objects/Node');
 var databaseHandler = require('../databaseHandler.js');
 var express = require('express');
+//var bodyParser = require('body-parser');
 var router = express.Router();
 
 var dbHandler = new databaseHandler();
@@ -15,6 +16,15 @@ router.route('/nodes/:id').get(function(req, res) {
    dbHandler.getNode(req.params.id, function(obj){
       res.send(JSON.stringify(obj));
    });
+});
+
+router.route('/nodes/').post(function(req, res) {
+   console.log(req.body);
+   var var1 = req.body.node;
+   dbHandler.setNode(new Node(JSON.parse(var1)), function(obj){
+      res.send(JSON.stringify(obj));
+   });
+   res.send(req.body);
 });
 
 router.route('/dbHandler').get(function(req, res) {

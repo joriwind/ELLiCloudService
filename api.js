@@ -1,17 +1,28 @@
 var express = require('express')
 var routes = require('./routes/elliroutes'); //routes are defined here
+var bodyParser = require('body-parser');
+var https = require('https');
+var fs = require('fs');
 var app = express();
 
 //configure body-parser
 //app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded());
-app.use('/api', routes); //This is our route middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
+app.use('/api', routes);
 app.set('port', process.env.PORT || 8000);
+ //This is our route middleware
+
+//app.set('port', process.env.PORT || 8000);
  
-var server = app.listen(app.get('port'), function() {
+/*var server = app.listen(app.get('port'), function() {
+   
   console.log('Express server listening on port ' + server.address().port);
-});
+});*/
+
+https.createServer(options, app).listen(443);
 
 //module.exports = app;
 
