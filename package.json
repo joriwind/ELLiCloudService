@@ -4,7 +4,8 @@
   "description": "Express cloud service",
   "main": "api.js",
   "dependencies": {
-    "express": "^4.12.1"
+    "express": "^4.12.1",
+    "socket.io": "^1.3.5"
   },
   "devDependencies": {},
   "scripts": {

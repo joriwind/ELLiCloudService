@@ -1,9 +1,10 @@
 var express = require('express')
 var routes = require('./routes/elliroutes'); //routes are defined here
 var bodyParser = require('body-parser');
-var https = require('https');
+var http = require('http');
 var fs = require('fs');
 var app = express();
+var ssh = require('ssh2')(http);
 
 //configure body-parser
 //app.use(bodyParser.json());
@@ -20,12 +21,8 @@ app.use('/api', routes);
   console.log('Express server listening on port ' + server.address().port);
 });*/
 
+ssh.on('connection', function(){ /* … */ });
 
-var privateKey  = fs.readFileSync('certificates/akey-key.pem');
-var certificate = fs.readFileSync('certificates/akey-cert.pem');
+var httpServer = http.createServer(app);
 
-var credentials = {key: privateKey, cert: certificate};
-
-var httpsServer = https.createServer(credentials, app);
-
-httpsServer.listen(443)
+httpServer.listen(8000)
