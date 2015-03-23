@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var http = require('http');
 var fs = require('fs');
 var app = express();
-var ssh = require('ssh2')(http);
 
 //configure body-parser
 //app.use(bodyParser.json());
@@ -21,7 +20,7 @@ app.use('/api', routes);
   console.log('Express server listening on port ' + server.address().port);
 });*/
 
-ssh.on('connection', function(){ /* … */ });
+//ssh.on('connection', function(){ /* … */ });
 
 var httpServer = http.createServer(app);
 
