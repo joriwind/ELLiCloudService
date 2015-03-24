@@ -1,4 +1,5 @@
 var Node = require('../objects/Node');
+var SiteController = require('../objects/SiteController');
 var databaseHandler = require('../databaseHandler.js');
 var express = require('express');
 //var bodyParser = require('body-parser');
@@ -21,13 +22,32 @@ router.route('/nodes/:id').get(function(req, res) {
 });
 
 router.route('/nodes/').post(function(req, res) {
-   console.log("POST: " + "param: " + JSON.stringify(req.params)+" body: "  + JSON.stringify(req.body));
-   var var1 = JSON.stringify(req.body.node);
+   console.log("POST: body: "  + JSON.stringify(req.body));
    console.log("POST additional the node: " + req.body.node);
-   dbHandler.setNode(new Node(JSON.parse(var1)), function(obj){
+   var var1 = req.body.node;
+   var node = new Node(var1);
+   console.log("node: " + JSON.stringify(node));
+   dbHandler.insertNode(node, function(obj){
       res.send(JSON.stringify(obj));
    });
    res.send(req.body);
+});
+
+router.route('/sitecontrollers/').post(function(req, res) {
+   console.log("POST: body: "  + JSON.stringify(req.body));
+   var var1 = JSON.stringify(req.body.siteController);
+   console.log("POST additional the node: " + req.body.node);
+   dbHandler.insertSiteController(new SiteController(JSON.parse(var1)), function(obj){
+      res.send(JSON.stringify(obj));
+   });
+   res.send(req.body);
+});
+
+router.route('/sitecontrollers/').get(function(req, res) {
+   console.log("Get all the siteControllers");
+   dbHandler.getSiteControllers(function(obj){
+      res.send(JSON.stringify(obj));
+   });
 });
 
 router.route('/dbHandler').get(function(req, res) {
