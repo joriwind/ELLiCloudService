@@ -35,7 +35,7 @@ router.route('/sitecontrollers/').post(function(req, res) {
    console.log("/sitecontrollers/ POST body: " + JSON.stringify(req.body));
    var var1 = req.body.siteController;
    var siteController = new SiteController(var1);
-   console.log("node: " + JSON.stringify(siteController));
+   console.log("New Site Controller: " + JSON.stringify(siteController));
    dbHandler.insertSiteController(siteController, function(obj){
       res.send(JSON.stringify(obj));
    });

@@ -141,7 +141,7 @@ databaseHandler.prototype.insertSiteController = function(siteController, callba
               return console.error('error running query', err);
             }
             //done();
-            console.log("Site controller added: " + node.id + " rows changed: " + result.rows.length);
+            console.log("Site controller added: " + siteController.id + " rows changed: " + result.rows.length);
             var object = result.rows[0];
             callback(object);
             
