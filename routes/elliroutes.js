@@ -14,14 +14,14 @@ router.route('/nodes').get(function(req, res) {
 });
 
 router.route('/nodes/:id').get(function(req, res) {
-   console.log("Get one node: " + req);
+   console.log("Get one node: " + req.params.id);
    dbHandler.getNode(req.params.id, function(obj){
       res.send(JSON.stringify(obj));
    });
 });
 
 router.route('/nodes/').post(function(req, res) {
-   console.log("POST: " + req);
+   console.log("POST: " + "param: " + req.params+" body: "  + req.body);
    var var1 = req.body.node;
    dbHandler.setNode(new Node(JSON.parse(var1)), function(obj){
       res.send(JSON.stringify(obj));
