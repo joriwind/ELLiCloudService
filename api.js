@@ -25,3 +25,4 @@ app.use('/api', routes);
 var httpServer = http.createServer(app);
 
 httpServer.listen(8000)
+console.log("Started httpServer on: " + httpServer);

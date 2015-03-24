@@ -7,19 +7,21 @@ var router = express.Router();
 var dbHandler = new databaseHandler();
 
 router.route('/nodes').get(function(req, res) {
+   console.log("GET all");
    dbHandler.getNodes(function(obj){
       res.send(JSON.stringify(obj));
    });
 });
 
 router.route('/nodes/:id').get(function(req, res) {
+   console.log("Get one node: " + req);
    dbHandler.getNode(req.params.id, function(obj){
       res.send(JSON.stringify(obj));
    });
 });
 
 router.route('/nodes/').post(function(req, res) {
-   console.log(req.body);
+   console.log("POST: " + req);
    var var1 = req.body.node;
    dbHandler.setNode(new Node(JSON.parse(var1)), function(obj){
       res.send(JSON.stringify(obj));
