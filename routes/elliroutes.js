@@ -21,7 +21,7 @@ router.route('/nodes/:id').get(function(req, res) {
 });
 
 router.route('/nodes/').post(function(req, res) {
-   console.log("POST: " + "param: " + req.params+" body: "  + req.body);
+   console.log("POST: " + "param: " + JSON.stringify(req.params)+" body: "  + JSON.stringify(req.body));
    var var1 = req.body.node;
    dbHandler.setNode(new Node(JSON.parse(var1)), function(obj){
       res.send(JSON.stringify(obj));
