@@ -22,8 +22,6 @@ router.route('/nodes/:id').get(function(req, res) {
 });
 
 router.route('/nodes/').post(function(req, res) {
-   console.log("POST: body: "  + JSON.stringify(req.body));
-   console.log("POST additional the node: " + req.body.node);
    var var1 = req.body.node;
    var node = new Node(var1);
    console.log("node: " + JSON.stringify(node));
@@ -34,10 +32,11 @@ router.route('/nodes/').post(function(req, res) {
 });
 
 router.route('/sitecontrollers/').post(function(req, res) {
-   console.log("POST: body: "  + JSON.stringify(req.body));
-   var var1 = JSON.stringify(req.body.siteController);
-   console.log("POST additional the node: " + req.body.node);
-   dbHandler.insertSiteController(new SiteController(JSON.parse(var1)), function(obj){
+   console.log("/sitecontrollers/ POST body: " + JSON.stringify(req.body));
+   var var1 = req.body.siteController;
+   var siteController = new SiteController(var1);
+   console.log("node: " + JSON.stringify(node));
+   dbHandler.insertSiteController(siteController, function(obj){
       res.send(JSON.stringify(obj));
    });
    res.send(req.body);
