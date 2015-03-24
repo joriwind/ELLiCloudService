@@ -102,8 +102,8 @@ databaseHandler.prototype.insertNode = function(node, callback){
                return console.error('error running query', err);
             }
             console.log("Node inserted: " + node.id + " rows changed: " + result.rows.length);
-            object = result.rows[0];
-            callback(object);
+            
+            callback(node);
             
          });
       }
@@ -148,8 +148,8 @@ databaseHandler.prototype.insertSiteController = function(siteController, callba
             }
             //done();
             console.log("Site controller added: " + siteController.id + " rows changed: " + result.rows.length);
-            var object = result.rows[0];
-            callback(object);
+            
+            callback(siteController);
             
          });
       }
