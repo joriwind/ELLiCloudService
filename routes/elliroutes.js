@@ -40,7 +40,6 @@ router.route('/nodes/').post(function(req, res) {
          res.send(err);
       }
    });
-   res.send(req.body);
 });
 
 router.route('/sitecontrollers/').post(function(req, res) {
@@ -55,7 +54,6 @@ router.route('/sitecontrollers/').post(function(req, res) {
          res.send(err);
       }
    });
-   res.send(req.body);
 });
 
 router.route('/sitecontrollers/').get(function(req, res) {
@@ -69,12 +67,5 @@ router.route('/sitecontrollers/').get(function(req, res) {
    });
 });
 
-router.route('/dbHandler').get(function(req, res) {
-   return res.send(dbHandler);
-});
-
-router.route('/testObject').post(function(req, res) {
-  
-});
 
 module.exports = router;
