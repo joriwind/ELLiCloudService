@@ -6,14 +6,11 @@ var fs = require('fs');
 var app = express();
 
 //configure body-parser
-//app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//Configure routes
 app.use('/api', routes);
-//app.set('port', process.env.PORT || 8000);
- //This is our route middleware
  
 /*var server = app.listen(app.get('port'), function() {
    
@@ -25,4 +22,4 @@ app.use('/api', routes);
 var httpServer = http.createServer(app);
 
 httpServer.listen(8000)
-console.log("Started httpServer");
+console.log("Started httpServer, listening on port: " + httpServer.address().port);

@@ -14,7 +14,7 @@ var databaseHandler = function(){
    //this.ready = true;
 }
 
-/** Node stuf **/
+/** Node stuff **/
 
 databaseHandler.prototype.getNodes = function(callback){
    pg.connect(conString, function (err, client, done) {
@@ -112,7 +112,7 @@ databaseHandler.prototype.insertNode = function(node, callback){
 
 }
 
-/** Site Controller stuf**/
+/** Site Controller stuff **/
 
 databaseHandler.prototype.getSiteControllers = function(callback){
    pg.connect(conString, function (err, client, done) {
