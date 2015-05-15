@@ -32,7 +32,7 @@ int main(char** args){
    //ret = wolfSSL_KeyPemToDer(eccCaKeyFile, 
    printf("Start of main\n");
    //ret = gen_cert("./certs/cert-req.pem", certName);
-   ret = gen_cert_req(req, "./certs/test_req", "./certs/server-key.der");
+   ret = gen_cert_req(req, "./certs/test_req", "./certs/test-key");
    if(ret != 0){
       printf("Error in main gen_cert_req: %i\n", ret);
       return -1;
@@ -41,17 +41,26 @@ int main(char** args){
    }
    
    //ret = sign_csr(req, "./certs/test_req.der", "./certs/test_cert");
-   ret = gen_certFromReq("./certs/test_req.der", "./certs/test_cert");
+   /*ret = gen_certFromReq("./certs/test_req.der", "./certs/test_cert");
    if(ret != 0){
       printf("Error in main gen_certFromReq: %i\n", ret);
       return -1;
    }else{
       printf("Signed\n");
+   }*/
+   
+   ret = gen_cert("./certs/test-key.pem", "./certs/test_certO.pem");
+   if(ret != 0){
+      printf("Error in main gen_cert: %i\n", ret);
+      return -1;
+   }else{
+      printf("Cert generated\n");
    }
    printf("Succeeded\n");
    return 0;
 }
 
+//Not working yet
 int gen_certFromReq(char* req_loc, char* cert_loc){
    
    DecodedCert certDecode;
@@ -190,6 +199,9 @@ int gen_certFromReq(char* req_loc, char* cert_loc){
    return 0;
 }
 
+/**
+ * Generates cert Request, CSR
+**/
 int gen_cert_req(Cert* request, char* req_loc, char* key_loc){
    //Cert        req;
    byte        der[4096];
@@ -239,7 +251,7 @@ int gen_cert_req(Cert* request, char* req_loc, char* key_loc){
    if(derSz < 0)
      printf("DER error\n");
 
-   pemSz = wc_DerToPem(der,derSz,pem,sizeof(pem),PRIVATEKEY_TYPE);
+   pemSz = wc_DerToPem(der,derSz,pem,sizeof(pem),ECC_PRIVATEKEY_TYPE);
 
    if(pemSz < 0)
      printf("PEM error\n");
@@ -329,6 +341,7 @@ int gen_cert_req(Cert* request, char* req_loc, char* key_loc){
    return 0;
 }
 
+//Not working
 int sign_csr(Cert* req, char* der_loc, char* cert_loc){
    RNG rng;
    
@@ -424,12 +437,14 @@ int sign_csr(Cert* req, char* der_loc, char* cert_loc){
    return 0;
 }
 
-int gen_cert(char* request, char* certificate){
+
+int gen_cert(char* key_loc, char* cert_loc){
    
 // Certificate Generation and signing by CA certificate
    RNG rng;
    
    ecc_key     caKey;
+   ecc_key     key;
    Cert        myCert;
    //Cert        certReq;
    byte        derCert[4096];
@@ -444,8 +459,13 @@ int gen_cert(char* request, char* certificate){
    size_t      bytes;
    word32      idx = 0;
    
+   /* Setup RNG */
+   ret = wc_InitRng(&rng);
+   if(ret != 0){
+      return -1;
+   }
    
-   
+   /* Load CA key */
    FILE*  file = fopen(eccCaKeyFile, "rb");
 
    if (!file)
@@ -458,14 +478,31 @@ int gen_cert(char* request, char* certificate){
    ret = wc_EccPrivateKeyDecode(tmp, &idx, &caKey, (word32)bytes);
    if (ret != 0) 
    {
-      printf("Problem decoding private key: %i\n", ret);    
+      printf("Problem decoding private caKey: %i\n", ret);    
+      return -413;
+   }
+   fclose(file);
+   
+   /* Load input key */
+   file = fopen(key_loc, "rb");
+   if (!file) {
+     return -49;
+   }
+   
+   memset(tmp, 0, sizeof(tmp));
+   
+   bytes = fread(tmp, 1, sizeof(tmp), file);
+   fclose(file);
+   
+   wc_ecc_init(&key);  
+   //ret = wc_EccPrivateKeyDecode(tmp, &idx, &key, (word32)bytes);
+   ret = wc_ecc_import_x963(tmp, (word32)bytes, &key);
+   if (ret != 0) 
+   {
+      printf("Problem decoding key: %i\n", ret);    
       return -413;
    }
    
-   ret = wc_InitRng(&rng);
-   if(ret != 0){
-      return -1;
-   }
    
    
    /*FILE* file_certReq;
@@ -492,11 +529,11 @@ int gen_cert(char* request, char* certificate){
    ret = wc_SetIssuer(&myCert,eccCaCertFile);
    if(ret < 0)
       printf("Problem setting issuer..\n");
-   ret = wc_SetSubject(&myCert,request);
+   /*ret = wc_SetSubject(&myCert,request);
    if(ret < 0)
-      printf("Problem setting subject..\n");
+      printf("Problem setting subject..\n");*/
 
-   certSz = wc_MakeCert(&myCert, derCert, sizeof(derCert),NULL,  &caKey, &rng); 
+   certSz = wc_MakeCert(&myCert, derCert, sizeof(derCert),NULL,  &key, &rng); 
    if (certSz < 0)
    {
       printf("Problem with Make cert\n");            
@@ -521,7 +558,7 @@ int gen_cert(char* request, char* certificate){
    }
    
    FILE* certfp;
-   certfp = fopen(certificate,"w+");
+   certfp = fopen(cert_loc,"w+");
    fwrite(pemCert,1,sizeof(pemCert),certfp);
 
    fclose(certfp);
